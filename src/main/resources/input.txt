@@ -1,0 +1,6 @@
+fetch h http://localhost:9000/companies
+ foreach c h.result.companies.company 
+   fetch v https://api.foursquare.com/v2/venues/search?ll={c.address[0].coordinate.north,c.address[0].coordinate.east}&client_id=OO2AQINH0V5NFYIV0TV2S33KNCPSO1IOVVWEQPXQNLDWDSRK&client_secret=2PN5W2EHICN3IBOQESGSAYFNIHVYYBLLG0RMQ31EV245HBDK&intent=match&name={c.displayName}&v=20180401 
+     fetch d https://api.foursquare.com/v2/venues/{v.response.venues[0].id}/photos?client_id=OO2AQINH0V5NFYIV0TV2S33KNCPSO1IOVVWEQPXQNLDWDSRK&client_secret=2PN5W2EHICN3IBOQESGSAYFNIHVYYBLLG0RMQ31EV245HBDK&v=20180401 
+       foreach i d.response.photos.items 
+         download {i.prefix}original{i.suffix} c:\temp\photos\{c.id}_{i.suffix}
